@@ -3,9 +3,9 @@ Pod::Spec.new do |spec|
   spec.version      = '3.5.3'
   spec.license       = { :type => 'Copyright', :text => 'EaseMob Inc. 2017' }
   spec.summary      = 'EaseMob UI Kit'
-  spec.homepage     = 'https://github.com/easemob/easeui-ios-hyphenate-cocoapods'
+  spec.homepage     = 'https://github.com/sansuinanhai/easeui-ios-hyphenate-cocoapods'
   spec.author       = {'EaseMob Inc.' => 'admin@easemob.com'}
-  spec.source       =  {:git => 'https://github.com/easemob/easeui-ios-hyphenate-cocoapods.git', :tag => spec.version.to_s }
+  spec.source       =  {:git => 'https://github.com/sansuinanhai/easeui-ios-hyphenate-cocoapods.git', :tag => spec.version.to_s }
   spec.source_files = 'EaseUI/**/*.{h,m,mm}'
   spec.public_header_files = '**/*.{h}'
   spec.private_header_files = ['EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/amrwapper/wav.h','EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/amrwapper/amrFileCodec.h','EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrnb/*.h','EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrwb/*.h']
