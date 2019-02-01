@@ -33,6 +33,10 @@
 
 #define IOS_VERSION [[UIDevice currentDevice] systemVersion]>=9.0
 
+#define EaseLocalString(key) [[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"EaseUIResource" ofType:@"bundle"]] localizedStringForKey:key value:key table:@"EaseUI"]
+#define EaseColorFromHex(hexValue) [UIColor colorWithRed:((float)((hexValue & 0xFF0000) >> 16))/255.0 green:((float)((hexValue & 0xFF00) >> 8))/255.0 blue:((float)(hexValue & 0xFF))/255.0 alpha:1.0]
+
+
 typedef enum : NSUInteger {
     EMRequestRecord,
     EMCanRecord,

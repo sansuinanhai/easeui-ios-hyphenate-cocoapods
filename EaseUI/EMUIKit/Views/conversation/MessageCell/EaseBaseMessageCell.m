@@ -14,6 +14,9 @@
 
 #import "UIImageView+WebCache.h"
 
+#define EaseLocalString(key) [[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"EaseUIResource" ofType:@"bundle"]] localizedStringForKey:key value:key table:@"EaseUI"]
+
+
 @interface EaseBaseMessageCell()
 
 @property (strong, nonatomic) UILabel *nameLabel;
@@ -36,6 +39,8 @@
 
 + (void)initialize
 {
+    
+    
     // UIAppearance Proxy Defaults
     EaseBaseMessageCell *cell = [self appearance];
     cell.avatarSize = 30;
