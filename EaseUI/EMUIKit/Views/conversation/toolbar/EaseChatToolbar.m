@@ -37,6 +37,10 @@
 
 @property (nonatomic) BOOL isTextViewInputEnd;
 
+@property (nonatomic, assign) BOOL isRightFuncShow;
+/**分割线*/
+@property (nonatomic, weak) UIView *lineView;
+
 @end
 
 @implementation EaseChatToolbar
@@ -111,21 +115,32 @@
 - (void)_setupSubviews
 {
     //backgroundImageView
-    _backgroundImageView = [[UIImageView alloc] initWithFrame:self.bounds];
-    _backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    _backgroundImageView.backgroundColor = [UIColor clearColor];
-    _backgroundImageView.image = [[UIImage imageNamed:@"EaseUIResource.bundle/messageToolbarBg"] stretchableImageWithLeftCapWidth:0.5 topCapHeight:10];
-    [self addSubview:_backgroundImageView];
+//    _backgroundImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+//    _backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+//    _backgroundImageView.backgroundColor = [UIColor clearColor];
+//    _backgroundImageView.image = [[UIImage imageNamed:@"EaseUIResource.bundle/messageToolbarBg"] stretchableImageWithLeftCapWidth:0.5 topCapHeight:10];
+//    [self addSubview:_backgroundImageView];
+    
     
     //toolbar
     _toolbarView = [[UIView alloc] initWithFrame:self.bounds];
-    _toolbarView.backgroundColor = [UIColor clearColor];
+//    _toolbarView.backgroundColor = [UIColor clearColor];
+    _toolbarView.backgroundColor = [UIColor colorWithRed:240 / 255.0 green:242 / 255.0 blue:247 / 255.0 alpha:1.0];
+
     [self addSubview:_toolbarView];
     
     _toolbarBackgroundImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _toolbarView.frame.size.width, _toolbarView.frame.size.height)];
     _toolbarBackgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _toolbarBackgroundImageView.backgroundColor = [UIColor clearColor];
     [_toolbarView addSubview:_toolbarBackgroundImageView];
+    
+    //添加分割线
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, _toolbarView.frame.size.height - 1, _toolbarView.frame.size.width, 1)];
+    lineView.backgroundColor = EaseColorFromHex(0xdddddd);
+    lineView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    lineView.hidden = YES;
+    [_toolbarView addSubview:lineView];
+    _lineView = lineView;
     
     //input textview
     _inputTextView = [[EaseTextView alloc] initWithFrame:CGRectMake(self.horizontalPadding, self.verticalPadding, self.frame.size.width - self.verticalPadding * 2, self.frame.size.height - self.verticalPadding * 2)];
@@ -135,9 +150,11 @@
     _inputTextView.enablesReturnKeyAutomatically = YES; // UITextView内部判断send按钮是否可以用
     _inputTextView.placeHolder = @"输入新消息";
     _inputTextView.delegate = self;
-    _inputTextView.backgroundColor = [UIColor clearColor];
-    _inputTextView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-    _inputTextView.layer.borderWidth = 0.65f;
+//    _inputTextView.backgroundColor = [UIColor clearColor];
+//    _inputTextView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+//    _inputTextView.layer.borderWidth = 0.65f;
+
+    _inputTextView.backgroundColor = [UIColor whiteColor];
     _inputTextView.layer.cornerRadius = 6.0f;
     _previousTextViewContentHeight = [self _getTextViewContentH:_inputTextView];
     [_toolbarView addSubview:_inputTextView];
@@ -146,7 +163,9 @@
     UIButton *styleChangeButton = [[UIButton alloc] init];
     styleChangeButton.accessibilityIdentifier = @"style";
     styleChangeButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [styleChangeButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_record"] forState:UIControlStateNormal];
+//    [styleChangeButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_record"] forState:UIControlStateNormal];
+    [styleChangeButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_voice_icon_nor"] forState:UIControlStateNormal];
+
     [styleChangeButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_keyboard"] forState:UIControlStateSelected];
     [styleChangeButton addTarget:self action:@selector(styleButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -177,8 +196,12 @@
     self.faceButton = [[UIButton alloc] init];
     self.faceButton.accessibilityIdentifier = @"face";
     self.faceButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [self.faceButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_face"] forState:UIControlStateNormal];
-    [self.faceButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_faceSelected"] forState:UIControlStateHighlighted];
+//    [self.faceButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_face"] forState:UIControlStateNormal];
+//    [self.faceButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_faceSelected"] forState:UIControlStateHighlighted];//chatBar_emotion_icon_nor
+    [self.faceButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_emotion_icon_nor"] forState:UIControlStateNormal];
+    [self.faceButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_emotion_icon_nor"] forState:UIControlStateHighlighted];//chatBar_emotion_icon_nor
+    
+    
     [self.faceButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_keyboard"] forState:UIControlStateSelected];
     [self.faceButton addTarget:self action:@selector(faceButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     EaseChatToolbarItem *faceItem = [[EaseChatToolbarItem alloc] initWithButton:self.faceButton withView:self.faceView];
@@ -187,8 +210,11 @@
     self.moreButton = [[UIButton alloc] init];
     self.moreButton.accessibilityIdentifier = @"more";
     self.moreButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [self.moreButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_more"] forState:UIControlStateNormal];
-    [self.moreButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_moreSelected"] forState:UIControlStateHighlighted];
+//    [self.moreButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_more"] forState:UIControlStateNormal];
+//    [self.moreButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_moreSelected"] forState:UIControlStateHighlighted];
+    [self.moreButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_more_icon_nor"] forState:UIControlStateNormal];
+    [self.moreButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_more_icon_nor"] forState:UIControlStateHighlighted];
+
     [self.moreButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_keyboard"] forState:UIControlStateSelected];
     [self.moreButton addTarget:self action:@selector(moreButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     EaseChatToolbarItem *moreItem = [[EaseChatToolbarItem alloc] initWithButton:self.moreButton withView:self.moreView];
@@ -232,8 +258,24 @@
 {
     if (_moreView == nil) {
         _moreView = [[EaseChatBarMoreView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_toolbarView.frame), self.frame.size.width, 80) type:self.chatBarType];
-        _moreView.backgroundColor = [UIColor colorWithRed:240 / 255.0 green:242 / 255.0 blue:247 / 255.0 alpha:1.0];
+        _moreView.backgroundColor = [UIColor colorWithRed:240 / 255.0 green:242 / 255.0 blue:247 / 255.0 alpha:1.0];//80
         _moreView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        //相册
+        
+        [((EaseChatBarMoreView*)_moreView) insertItemWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_photo_new"] highlightedImage:nil title:@"相册"];
+
+        //红包
+        
+        [((EaseChatBarMoreView*)_moreView) insertItemWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_red"] highlightedImage:nil title:@"红包"];
+
+        //小游戏
+        [((EaseChatBarMoreView*)_moreView) insertItemWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_mini_game"] highlightedImage:nil title:@"小游戏"];
+
+        //名片
+        [((EaseChatBarMoreView*)_moreView) insertItemWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_id_card"] highlightedImage:nil title:@"名片"];
+
+        
+        
     }
     
     return _moreView;
@@ -482,14 +524,17 @@
     
     if(bottomHeight == 0 && self.frame.size.height == self.toolbarView.frame.size.height)
     {
+        self.lineView.hidden = YES;
         return;
     }
     
     if (bottomHeight == 0) {
         self.isShowButtomView = NO;
+        self.lineView.hidden = YES;
     }
     else{
         self.isShowButtomView = YES;
+        self.lineView.hidden = NO;
     }
     
     self.frame = toFrame;
@@ -510,19 +555,54 @@
 {
     if (![self.activityButtomView isEqual:bottomView]) {
         CGFloat bottomHeight = bottomView ? bottomView.frame.size.height : 0;
-        [self _willShowBottomHeight:bottomHeight];
         
-        if (bottomView) {
-            CGRect rect = bottomView.frame;
-            rect.origin.y = CGRectGetMaxY(self.toolbarView.frame);
-            bottomView.frame = rect;
-            [self addSubview:bottomView];
-        }
+        [UIView animateWithDuration:0.2 animations:^{
+            [self _willShowBottomHeight:bottomHeight];
+            
+            if (self.activityButtomView) {
+                [self.activityButtomView removeFromSuperview];
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (bottomView) {
+                        
+                        CGRect rect = bottomView.frame;
+                        rect.origin.y = CGRectGetMaxY(self.toolbarView.frame);
+                        bottomView.frame = rect;
+                        [self addSubview:bottomView];
+                        
+                        self.activityButtomView = bottomView;
+                        
+                    }
+
+                });
+            }
+            
+            if (bottomView == nil) {
+                if (self.activityButtomView) {
+                    [self.activityButtomView removeFromSuperview];
+                }
+                self.activityButtomView = bottomView;
+            }
+            
+            
+        } completion:^(BOOL finished) {
+            
+            if (!self.activityButtomView) {
+                if (bottomView) {
+                    
+                    CGRect rect = bottomView.frame;
+                    rect.origin.y = CGRectGetMaxY(self.toolbarView.frame);
+                    bottomView.frame = rect;
+                    [self addSubview:bottomView];
+                    
+                    self.activityButtomView = bottomView;
+                    
+                }
+            }
+            
+            
+        }];
         
-        if (self.activityButtomView) {
-            [self.activityButtomView removeFromSuperview];
-        }
-        self.activityButtomView = bottomView;
     }
 }
 
@@ -538,7 +618,9 @@
     }
     else if (toFrame.origin.y == [[UIScreen mainScreen] bounds].size.height)
     {
-        [self _willShowBottomHeight:0];
+        if (!self.isRightFuncShow) {
+            [self _willShowBottomHeight:0];
+        }
     }
     else{
         [self _willShowBottomHeight:toFrame.size.height - iPhoneX_BOTTOM_HEIGHT];
@@ -758,6 +840,9 @@
 {
     UIButton *button = (UIButton *)sender;
     button.selected = !button.selected;
+    
+    self.isRightFuncShow = NO;
+    
     if (button.selected) {
         for (EaseChatToolbarItem *item in self.rightItems) {
             item.button.selected = NO;
@@ -805,6 +890,8 @@
     }
     
     if (button.selected) {
+        self.isRightFuncShow = YES;
+
         [self.inputTextView resignFirstResponder];
         
         [self _willShowBottomView:faceItem.button2View];
@@ -815,6 +902,8 @@
             
         }];
     } else {
+        self.isRightFuncShow = NO;
+
         [self.inputTextView becomeFirstResponder];
     }
 }
@@ -839,6 +928,8 @@
     }
     
     if (button.selected) {
+        self.isRightFuncShow = YES;
+        
         [self.inputTextView resignFirstResponder];
         
         [self _willShowBottomView:moreItem.button2View];
@@ -849,6 +940,8 @@
     }
     else
     {
+        self.isRightFuncShow = NO;
+
         [self.inputTextView becomeFirstResponder];
     }
 }

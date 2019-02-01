@@ -27,6 +27,7 @@
 #import "EaseCustomMessageCell.h"
 #import "EaseLocalDefine.h"
 #import "EaseSDKHelper.h"
+#import "EaseMiniGameMessageCell.h"
 
 #define KHintAdjustY    50
 
@@ -138,8 +139,19 @@ typedef enum : NSUInteger {
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
     
-    [[EaseBaseMessageCell appearance] setSendBubbleBackgroundImage:[[UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_bg"] stretchableImageWithLeftCapWidth:5 topCapHeight:35]];
-    [[EaseBaseMessageCell appearance] setRecvBubbleBackgroundImage:[[UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_bg"] stretchableImageWithLeftCapWidth:35 topCapHeight:35]];
+//    [[EaseBaseMessageCell appearance] setSendBubbleBackgroundImage:[[UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_bg"] stretchableImageWithLeftCapWidth:5 topCapHeight:35]];
+//    [[EaseBaseMessageCell appearance] setRecvBubbleBackgroundImage:[[UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_bg"] stretchableImageWithLeftCapWidth:35 topCapHeight:35]];
+    
+    
+    UIImage *sendImageNor = [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_bg_new"];
+    UIImage *sendImage = [sendImageNor resizableImageWithCapInsets:UIEdgeInsetsMake(10, 6, 6, 10) resizingMode:UIImageResizingModeStretch];
+
+    [[EaseBaseMessageCell appearance] setSendBubbleBackgroundImage:sendImage];
+    
+    UIImage *recImageNor = [UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_bg_new"];
+    UIImage *recImage = [recImageNor resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 6, 6) resizingMode:UIImageResizingModeStretch];
+
+    [[EaseBaseMessageCell appearance] setRecvBubbleBackgroundImage:recImage];
     
     [[EaseBaseMessageCell appearance] setSendMessageVoiceAnimationImages:@[[UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_full"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_000"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_001"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_002"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_003"]]];
     [[EaseBaseMessageCell appearance] setRecvMessageVoiceAnimationImages:@[[UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing_full"],[UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing000"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing001"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing002"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing003"]]];
@@ -296,12 +308,12 @@ typedef enum : NSUInteger {
         __weak typeof(self) weakself = self;
         if (aReason == EMChatroomBeKickedReasonOffline) {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"(ಥ_ಥ)" message:[NSString stringWithFormat:@"离开聊天室\'%@\', 原因：账号离线. 是否重新加入聊天室？", aChatroom.chatroomId] preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"chatroom.join", @"Join") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:EaseLocalString(@"chatroom.join")/* NSLocalizedString(@"chatroom.join", @"Join")*/ style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [weakself joinChatroom:weakself.conversation.conversationId];
             }];
             [alertController addAction:okAction];
             
-            [alertController addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"alert.cancel", @"Cancel") style: UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [alertController addAction: [UIAlertAction actionWithTitle:EaseLocalString(@"alert.cancel") /*NSLocalizedString(@"alert.cancel", @"Cancel")*/ style: UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 [weakself.navigationController popToViewController:self animated:NO];
                 [weakself.navigationController popViewControllerAnimated:YES];
             }]];
@@ -562,7 +574,7 @@ typedef enum : NSUInteger {
 - (void)_customDownloadMessageFile:(EMMessage *)aMessage
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the  transfer attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:EaseLocalString(@"message.autoTransfer")/* NSLocalizedString(@"message.autoTransfer", @"Please customize the  transfer attachment method")*/ delegate:nil cancelButtonTitle:EaseLocalString(@"sure")/* NSLocalizedString(@"sure", @"OK")*/ otherButtonTitles:nil, nil];
         [alertView show];
     });
 }
@@ -1144,7 +1156,10 @@ typedef enum : NSUInteger {
             if (_dataSource && [_dataSource respondsToSelector:@selector(emotionURLFormessageViewController:messageModel:)]) {
                 EaseEmotion *emotion = [_dataSource emotionURLFormessageViewController:self messageModel:model];
                 if (emotion) {
-                    model.image = [UIImage sd_animatedGIFNamed:emotion.emotionOriginal];
+                    NSString *path = [[NSBundle mainBundle] pathForResource:emotion.emotionOriginal ofType:@"gif"];
+                    NSData *data = [NSData dataWithContentsOfFile:path];
+                    model.image = [UIImage sd_animatedGIFWithData:data];
+//                    model.image = [UIImage sd_animatedGIFNamed:emotion.emotionOriginal];
                     model.fileURLPath = emotion.emotionOriginalURL;
                 }
             }
@@ -1153,6 +1168,27 @@ typedef enum : NSUInteger {
             return sendCell;
         }
     }
+    
+    //判断是不是 小游戏消息类型
+    if ([[model.message.ext objectForKey:@"extType"] isEqualToString:@"miniGame"]) {
+        NSString *CellIdentifier = [EaseMiniGameMessageCell cellIdentifierWithModel:model];
+        //send cell
+        EaseMiniGameMessageCell *miniGameCell = (EaseMiniGameMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        // Configure the cell...
+        if (miniGameCell == nil) {
+            miniGameCell = [[EaseMiniGameMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier model:model];
+            miniGameCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        
+        miniGameCell.model = model;
+        miniGameCell.delegate = self;
+        return miniGameCell;
+    }
+    
+    
+    
+    
     
     NSString *CellIdentifier = [EaseMessageCell cellIdentifierWithModel:model];
     
@@ -1192,6 +1228,15 @@ typedef enum : NSUInteger {
                 return [EaseCustomMessageCell cellHeightWithModel:model];
             }
         }
+        
+        //判断是不是 小游戏消息类型
+        if ([[model.message.ext objectForKey:@"extType"] isEqualToString:@"miniGame"]) {
+            
+            return [EaseMiniGameMessageCell cellHeightWithModel:model];
+        }
+
+        
+        
         
         return [EaseBaseMessageCell cellHeightWithModel:model];
     }
@@ -1523,7 +1568,7 @@ typedef enum : NSUInteger {
                 break;
             case EMCanNotRecord:
             {
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"record.failToPermission", @"No recording permission") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:EaseLocalString(@"prompt")/* NSLocalizedString(@"prompt", @"Prompt")*/ message:EaseLocalString(@"record.failToPermission")/* NSLocalizedString(@"record.failToPermission", @"No recording permission")*/ delegate:nil cancelButtonTitle:EaseLocalString(@"ok") /*NSLocalizedString(@"ok", @"OK")*/ otherButtonTitles:nil, nil];
                 [alertView show];
             }
                 break;
@@ -1977,7 +2022,7 @@ typedef enum : NSUInteger {
     
     __weak typeof(self) weakself = self;
     if (!([EMClient sharedClient].options.isAutoTransferMessageAttachments) && isUploadFile) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"message.autoTransfer", @"Please customize the transfer attachment method") delegate:nil cancelButtonTitle:NSLocalizedString(@"sure", @"OK") otherButtonTitles:nil, nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:EaseLocalString(@"message.autoTransfer")/* NSLocalizedString(@"message.autoTransfer", @"Please customize the transfer attachment method")*/ delegate:nil cancelButtonTitle:EaseLocalString(@"sure") /*NSLocalizedString(@"sure", @"OK")*/ otherButtonTitles:nil, nil];
         [alertView show];
     } else {
         [self addMessageToDataSource:message

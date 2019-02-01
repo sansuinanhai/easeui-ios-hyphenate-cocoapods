@@ -67,6 +67,14 @@ extern NSString *const EaseMessageCellIdentifierRecvFile;
 @property (strong, nonatomic) UILabel *fileNameLabel;
 @property (strong, nonatomic) UILabel *fileSizeLabel;
 
+//miniGame Views
+@property (nonatomic, weak) UIView *separateLineView;
+@property (nonatomic, weak) UILabel *bottomLabel;
+@property (nonatomic, weak) UIImageView *arrowView;
+
+
+
+
 - (instancetype)initWithMargin:(UIEdgeInsets)margin
                       isSender:(BOOL)isSender;
 

@@ -45,7 +45,7 @@
     cell.messageNameFont = [UIFont systemFontOfSize:10];
     cell.messageNameHeight = 15;
     if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
-        cell.messageNameIsHidden = NO;
+        cell.messageNameIsHidden = YES;//隐藏昵称
     }
     
 //    cell.bubbleMargin = UIEdgeInsetsMake(8, 15, 8, 10);
@@ -285,10 +285,10 @@
                     _hasRead.text = [NSString stringWithFormat:@"%@ 已读", @(self.model.dingReadCount)];
                 } else if (self.model.isMessageRead) {
                     _hasRead.hidden = NO;
-                    _hasRead.text = NSLocalizedString(@"hasRead", @"Read");
+                    _hasRead.text = EaseLocalString(@"hasRead")/* NSLocalizedString(@"hasRead", @"Read")*/;
                 } else if (self.model.isDing) {
                     _hasRead.hidden = NO;
-                    _hasRead.text = [NSString stringWithFormat:@"%@ %@", @(self.model.dingReadCount), NSLocalizedString(@"hasRead", @"Read")];
+                    _hasRead.text = [NSString stringWithFormat:@"%@ %@", @(self.model.dingReadCount),EaseLocalString(@"hasRead")/*  NSLocalizedString(@"hasRead", @"Read")*/];
                 }
             }
                 break;

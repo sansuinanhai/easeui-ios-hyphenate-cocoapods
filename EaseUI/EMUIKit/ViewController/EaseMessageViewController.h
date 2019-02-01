@@ -543,4 +543,11 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 - (void)sendMessage:(EMMessage *)message
    isNeedUploadFile:(BOOL)isUploadFile;
 
+
+/**
+ 点击相册的代理方法
+ */
+
+- (void)moreViewPhotoAction:(EaseChatBarMoreView *)moreView;
+
 @end

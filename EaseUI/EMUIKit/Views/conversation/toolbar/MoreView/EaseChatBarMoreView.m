@@ -11,12 +11,15 @@
  */
 
 #import "EaseChatBarMoreView.h"
+#import "EaseChatBarMoreBtn.m"
 
-#define CHAT_BUTTON_SIZE CGSizeMake(50,60)
-#define INSETS 10
+#define CHAT_BUTTON_SIZE CGSizeMake(60,70)//(50,60)
+#define INSETS 34//10
 #define MOREVIEW_COL 4
 #define MOREVIEW_ROW 2
 #define MOREVIEW_BUTTON_TAG 1000
+
+#define EaseChatBarMoreViewH 138
 
 @implementation UIView (MoreView)
 
@@ -85,64 +88,64 @@
     _pageControl.numberOfPages = 1;
     [self addSubview:_pageControl];
     
-    CGFloat insets = (self.frame.size.width - 4 * CHAT_BUTTON_SIZE.width) / 5;
-    
-    _photoButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_photo"]
-                     highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_photoSelected"]
-                                title:@"相册"];
-
-    _photoButton.accessibilityIdentifier = @"image";
-    [_photoButton setFrame:CGRectMake(insets, 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
-    [_photoButton addTarget:self action:@selector(photoAction) forControlEvents:UIControlEventTouchUpInside];
-    _photoButton.tag = MOREVIEW_BUTTON_TAG;
-    [_scrollview addSubview:_photoButton];
-    
-    _locationButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_location"]
-                        highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_locationSelected"]
-                                   title:@"位置"];
-    _locationButton.accessibilityIdentifier = @"location";
-    [_locationButton setFrame:CGRectMake(insets * 2 + CHAT_BUTTON_SIZE.width, 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
-    [_locationButton addTarget:self action:@selector(locationAction) forControlEvents:UIControlEventTouchUpInside];
-    _locationButton.tag = MOREVIEW_BUTTON_TAG + 1;
-    [_scrollview addSubview:_locationButton];
-    
-    _takePicButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_camera"]
-                       highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_cameraSelected"]
-                                  title:@"拍照"];
-    [_takePicButton setFrame:CGRectMake(insets * 3 + CHAT_BUTTON_SIZE.width * 2, 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
-    [_takePicButton addTarget:self action:@selector(takePicAction) forControlEvents:UIControlEventTouchUpInside];
-    _takePicButton.tag = MOREVIEW_BUTTON_TAG + 2;
-    _maxIndex = 2;
-    [_scrollview addSubview:_takePicButton];
-    
-    _audioCallButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_audioCall"]
-                         highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_audioCallSelected"]
-                                    title:nil];
-    [_audioCallButton setFrame:CGRectMake(insets * 4 + CHAT_BUTTON_SIZE.width * 3, 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
-    [_audioCallButton addTarget:self action:@selector(takeAudioCallAction) forControlEvents:UIControlEventTouchUpInside];
-    _audioCallButton.tag = MOREVIEW_BUTTON_TAG + 3;
-    [_scrollview addSubview:_audioCallButton];
-    
-    _videoCallButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_videoCall"]
-                         highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_videoCallSelected"]
-                                    title:nil];
-    [_videoCallButton setFrame:CGRectMake(insets, 10 * 2 + CHAT_BUTTON_SIZE.height + 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
-    [_videoCallButton addTarget:self action:@selector(takeVideoCallAction) forControlEvents:UIControlEventTouchUpInside];
-    _videoCallButton.tag =MOREVIEW_BUTTON_TAG + 4;
-    _maxIndex = 4;
-    [_scrollview addSubview:_videoCallButton];
+//    CGFloat insets = (self.frame.size.width - 4 * CHAT_BUTTON_SIZE.width) / 5;
+//
+//    _photoButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_photo"]
+//                     highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_photoSelected"]
+//                                title:@"相册"];
+//
+//    _photoButton.accessibilityIdentifier = @"image";
+//    [_photoButton setFrame:CGRectMake(insets, 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
+//    [_photoButton addTarget:self action:@selector(photoAction) forControlEvents:UIControlEventTouchUpInside];
+//    _photoButton.tag = MOREVIEW_BUTTON_TAG;
+//    [_scrollview addSubview:_photoButton];
+//
+//    _locationButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_location"]
+//                        highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_locationSelected"]
+//                                   title:@"位置"];
+//    _locationButton.accessibilityIdentifier = @"location";
+//    [_locationButton setFrame:CGRectMake(insets * 2 + CHAT_BUTTON_SIZE.width, 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
+//    [_locationButton addTarget:self action:@selector(locationAction) forControlEvents:UIControlEventTouchUpInside];
+//    _locationButton.tag = MOREVIEW_BUTTON_TAG + 1;
+//    [_scrollview addSubview:_locationButton];
+//
+//    _takePicButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_camera"]
+//                       highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_cameraSelected"]
+//                                  title:@"拍照"];
+//    [_takePicButton setFrame:CGRectMake(insets * 3 + CHAT_BUTTON_SIZE.width * 2, 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
+//    [_takePicButton addTarget:self action:@selector(takePicAction) forControlEvents:UIControlEventTouchUpInside];
+//    _takePicButton.tag = MOREVIEW_BUTTON_TAG + 2;
+//    _maxIndex = 2;
+//    [_scrollview addSubview:_takePicButton];
+//
+//    _audioCallButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_audioCall"]
+//                         highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_audioCallSelected"]
+//                                    title:nil];
+//    [_audioCallButton setFrame:CGRectMake(insets * 4 + CHAT_BUTTON_SIZE.width * 3, 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
+//    [_audioCallButton addTarget:self action:@selector(takeAudioCallAction) forControlEvents:UIControlEventTouchUpInside];
+//    _audioCallButton.tag = MOREVIEW_BUTTON_TAG + 3;
+//    [_scrollview addSubview:_audioCallButton];
+//
+//    _videoCallButton = [self btnWithImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_videoCall"]
+//                         highlightedImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_videoCallSelected"]
+//                                    title:nil];
+//    [_videoCallButton setFrame:CGRectMake(insets, 10 * 2 + CHAT_BUTTON_SIZE.height + 10, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
+//    [_videoCallButton addTarget:self action:@selector(takeVideoCallAction) forControlEvents:UIControlEventTouchUpInside];
+//    _videoCallButton.tag =MOREVIEW_BUTTON_TAG + 4;
+//    _maxIndex = 4;
+//    [_scrollview addSubview:_videoCallButton];
 
     CGRect frame = self.frame;
-    frame.size.height = 150;
-    if (type == EMChatToolbarTypeChat) {
-        [_audioCallButton setTitle:@"语音" forState:UIControlStateNormal];
-        [_videoCallButton setTitle:@"视频" forState:UIControlStateNormal];
-    }
-    else if (type == EMChatToolbarTypeGroup)
-    {
-        [_audioCallButton setTitle:@"多人会议" forState:UIControlStateNormal];
-        [_videoCallButton setTitle:@"互动会议" forState:UIControlStateNormal];
-    }
+    frame.size.height = EaseChatBarMoreViewH;//150
+//    if (type == EMChatToolbarTypeChat) {
+//        [_audioCallButton setTitle:@"语音" forState:UIControlStateNormal];
+//        [_videoCallButton setTitle:@"视频" forState:UIControlStateNormal];
+//    }
+//    else if (type == EMChatToolbarTypeGroup)
+//    {
+//        [_audioCallButton setTitle:@"多人会议" forState:UIControlStateNormal];
+//        [_videoCallButton setTitle:@"互动会议" forState:UIControlStateNormal];
+//    }
     self.frame = frame;
     _scrollview.frame = CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame));
     _pageControl.frame = CGRectMake(0, CGRectGetHeight(frame) - 20, CGRectGetWidth(frame), 20);
@@ -151,14 +154,20 @@
 
 
 - (UIButton *)btnWithImage:(UIImage *)aImage highlightedImage:(UIImage *)aHighLightedImage title:(NSString *)aTitle {
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    EaseChatBarMoreBtn *btn = [EaseChatBarMoreBtn buttonWithType:UIButtonTypeCustom];
+//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setImage:aImage forState:UIControlStateNormal];
     [btn setImage:aHighLightedImage forState:UIControlStateHighlighted];
     [btn setTitle:aTitle forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize: 12.0];
-    btn.imageEdgeInsets = UIEdgeInsetsMake(-10, 0, 20, 0);
-    btn.titleEdgeInsets = UIEdgeInsetsMake(14, -60, -20, 0);
+    [btn setTitleColor:EaseColorFromHex(0x7c7c7c) forState:UIControlStateNormal];
+//    btn.imageEdgeInsets = UIEdgeInsetsMake(-10, 0, 20, 0);
+//    btn.titleEdgeInsets = UIEdgeInsetsMake(14, -60, -20, 0);
+    
+
+
     return btn;
 }
 
@@ -166,13 +175,16 @@
 {
     CGFloat insets = (self.frame.size.width - MOREVIEW_COL * CHAT_BUTTON_SIZE.width) / 5;
     CGRect frame = self.frame;
-    _maxIndex++;
+//    _maxIndex++;
     NSInteger pageSize = MOREVIEW_COL*MOREVIEW_ROW;
     NSInteger page = _maxIndex/pageSize;
     NSInteger row = (_maxIndex%pageSize)/MOREVIEW_COL;
     NSInteger col = _maxIndex%MOREVIEW_COL;
     UIButton *moreButton = [self btnWithImage:image highlightedImage:highLightedImage title:title];
-    [moreButton setFrame:CGRectMake(page * CGRectGetWidth(self.frame) + insets * (col + 1) + CHAT_BUTTON_SIZE.width * col, INSETS + INSETS * 2 * row + CHAT_BUTTON_SIZE.height * row, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
+//    [moreButton setFrame:CGRectMake(page * CGRectGetWidth(self.frame) + insets * (col + 1) + CHAT_BUTTON_SIZE.width * col, INSETS + INSETS * 2 * row + CHAT_BUTTON_SIZE.height * row, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
+    
+    [moreButton setFrame:CGRectMake(insets + (CHAT_BUTTON_SIZE.width + insets) * col, INSETS + INSETS * 2 * row + CHAT_BUTTON_SIZE.height * row, CHAT_BUTTON_SIZE.width , CHAT_BUTTON_SIZE.height)];
+
     [moreButton setImage:image forState:UIControlStateNormal];
     [moreButton setImage:highLightedImage forState:UIControlStateHighlighted];
     [moreButton addTarget:self action:@selector(moreAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -180,13 +192,19 @@
     [_scrollview addSubview:moreButton];
     [_scrollview setContentSize:CGSizeMake(CGRectGetWidth(self.frame) * (page + 1), CGRectGetHeight(self.frame))];
     [_pageControl setNumberOfPages:page + 1];
+    
+    _maxIndex++;
+
+    
     if (_maxIndex >=5) {
-        frame.size.height = 150;
+        frame.size.height = EaseChatBarMoreViewH;
         _scrollview.frame = CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame));
         _pageControl.frame = CGRectMake(0, CGRectGetHeight(frame) - 20, CGRectGetWidth(frame), 20);
     }
     self.frame = frame;
     _pageControl.hidden = _pageControl.numberOfPages<=1;
+    
+
 }
 
 - (void)updateItemWithImage:(UIImage *)image highlightedImage:(UIImage *)highLightedImage title:(NSString *)title atIndex:(NSInteger)index
@@ -229,9 +247,9 @@
     }
     _maxIndex--;
     if (_maxIndex >=5) {
-        frame.size.height = 150;
+        frame.size.height = EaseChatBarMoreViewH;
     } else {
-        frame.size.height = 80;
+        frame.size.height = EaseChatBarMoreViewH/2 + 10;
     }
     self.frame = frame;
     _scrollview.frame = CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame));
