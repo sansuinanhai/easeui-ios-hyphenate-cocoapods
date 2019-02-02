@@ -11,7 +11,7 @@
  */
 
 #import "EaseChatBarMoreView.h"
-#import "EaseChatBarMoreBtn.m"
+#import "EaseChatBarItemBtn.h"
 
 #define CHAT_BUTTON_SIZE CGSizeMake(60,70)//(50,60)
 #define INSETS 34//10
@@ -157,7 +157,7 @@
 
 - (UIButton *)btnWithImage:(UIImage *)aImage highlightedImage:(UIImage *)aHighLightedImage title:(NSString *)aTitle {
     
-    EaseChatBarMoreBtn *btn = [EaseChatBarMoreBtn buttonWithType:UIButtonTypeCustom];
+    EaseChatBarItemBtn *btn = [EaseChatBarItemBtn buttonWithType:UIButtonTypeCustom];
 //    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setImage:aImage forState:UIControlStateNormal];
     [btn setImage:aHighLightedImage forState:UIControlStateHighlighted];

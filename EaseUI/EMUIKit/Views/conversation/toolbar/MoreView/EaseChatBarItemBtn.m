@@ -1,15 +1,14 @@
 //
-//  EaseChatBarMoreBtn.m
+//  EaseChatBarItemBtn.m
 //  EaseUI
 //
-//  Created by yuan yao on 2019/1/29.
+//  Created by yuan yao on 2019/2/2.
 //
 
-#import "EaseChatBarMoreBtn.h"
-
+#import "EaseChatBarItemBtn.h"
 #define EaseChatBarMoreBtnImageW 56
 
-@implementation EaseChatBarMoreBtn
+@implementation EaseChatBarItemBtn
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
