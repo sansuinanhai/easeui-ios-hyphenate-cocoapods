@@ -1162,7 +1162,9 @@ typedef enum : NSUInteger {
                 if (emotion) {
                     NSString *path = [[NSBundle mainBundle] pathForResource:emotion.emotionOriginal ofType:@"gif"];
                     NSData *data = [NSData dataWithContentsOfFile:path];
-                    model.image = [UIImage sd_animatedGIFWithData:data];
+//                    model.image = [UIImage sd_animatedGIFWithData:data];
+                    model.image = [UIImage sd_imageWithGIFData:data];
+
 //                    model.image = [UIImage sd_animatedGIFNamed:emotion.emotionOriginal];
                     model.fileURLPath = emotion.emotionOriginalURL;
                 }
